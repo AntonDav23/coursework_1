@@ -4,7 +4,7 @@ import json
 import pandas as pd
 
 
-def hello(hour):
+def hello(hour: int) -> str:
     """Возвращаем приветствие в зависимости от времени суток."""
     if 6 <= hour < 12:
         return "Доброе утро"
@@ -15,12 +15,14 @@ def hello(hour):
     else:
         return "Доброй ночи"
 
-def get_greeting(data_string):
+
+def get_greeting(data_string: str) -> str:
     """Получает строку с датой и временем и возвращает приветствие."""
     date_time = datetime.strptime(data_string, "%Y-%m-%d %H:%M:%S")
     return hello(date_time.hour)
 
-def main_page(date_string):
+
+def main_page(date_string: str) -> str:
     """Формирует данные для главной страницы."""
     greeting = get_greeting(date_string)
     transactions = load_transactions()
@@ -36,10 +38,9 @@ def main_page(date_string):
     # топ-5 транзакций по сумме платежа
     top_transactions = transactions.sort_values(by="Сумма платежа", ascending=False).head(5)
     top_transactions = top_transactions[["Дата операции", "Сумма платежа", "Категория", "Описание"]]
-    top_transactions["Дата операции"] = pd.to_datetime(
-        top_transactions["Дата операции"],
-        dayfirst=True
-    ).dt.strftime("%d.%m.%Y")
+    top_transactions["Дата операции"] = pd.to_datetime(top_transactions["Дата операции"], dayfirst=True).dt.strftime(
+        "%d.%m.%Y"
+    )
 
     result = {
         "greeting": greeting,
@@ -48,5 +49,3 @@ def main_page(date_string):
     }
 
     return json.dumps(result, ensure_ascii=False, default=str)
-
-

@@ -1,8 +1,9 @@
 import json
+import pandas as pd
 
 
-def simple_search(query, transactions):
-    """Ищет транзакции по категориии или описанию"""
+def simple_search(query: str, transactions: pd.DataFrame) -> str:
+    """Ищет транзакции по категории или описанию"""
     query = query.lower()
     result = []
     for _, transaction in transactions.iterrows():
@@ -12,4 +13,3 @@ def simple_search(query, transactions):
         if query in category or query in description:
             result.append(transaction.to_dict())
     return json.dumps(result, ensure_ascii=False, default=str)
-
