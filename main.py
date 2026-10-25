@@ -1,8 +1,9 @@
 import json
+
 from src.views import main_page
 
 
-def main():
+def main() -> None:
     """Запускаем главную страницу приложения."""
     data_string = "2021-12-21 14:30:00"
 

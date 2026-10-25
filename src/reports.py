@@ -1,7 +1,32 @@
+from functools import wraps
+from typing import Any, Callable
+
 import pandas as pd
-from typing import Any
 
 
+def save_report(filename: str="report.json") -> Callable:
+    """Декоратор для сохранения результата отчета в JSON-файл."""
+
+    def decorator(func: Callable) -> Callable:
+        @wraps(func)
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
+            result = func(*args, **kwargs)
+
+            result.to_json(
+                filename,
+                orient="records",
+                force_ascii=False,
+                indent=4,
+                date_format="iso",
+            )
+            return result
+
+        return wrapper
+
+    return decorator
+
+
+@save_report()
 def category_expenses(transactions: pd.DataFrame, category: str, date: Any = None) -> pd.DataFrame:
     """Возращает траты по категории за последние три месяца"""
     if date is None:
